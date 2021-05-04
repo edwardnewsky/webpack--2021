@@ -15,7 +15,7 @@
   \**************************/
 /***/ (() => {
 
-eval("function createAnalytics() {\r\n  let counter = 0;\r\n  let isDestroyed = false;\r\n\r\n  const listener = () => counter++;\r\n\r\n  document / addEventListener('click', listener);\r\n\r\n  return {\r\n    destroy() {\r\n      document.removeEventListener('click', listener);\r\n      isDestroyed = true;\r\n    },\r\n\r\n    getClicks() {\r\n      if (isDestroyed) {\r\n        return `Analytics is destroyed. Total clicks = ${counter}`;\r\n      }\r\n      return counter;\r\n    },\r\n  };\r\n}\r\n\r\nwindow.analytics = createAnalytics();\r\n\n\n//# sourceURL=webpack://vikuplekarstv/./src/analytics.js?");
+eval("function createAnalytics() {\r\n  let counter = 0;\r\n  let destroyed = false;\r\n\r\n  const listener = () => counter++;\r\n\r\n  document / addEventListener('click', listener);\r\n\r\n  return {\r\n    destroy() {\r\n      document.removeEventListener('click', listener);\r\n      isDestroyed = true;\r\n    },\r\n\r\n    getClicks() {\r\n      if (destroyed) {\r\n        return `Analytics is destroyed. Total clicks = ${counter}`;\r\n      }\r\n      return counter;\r\n    },\r\n  };\r\n}\r\n\r\nwindow.analytics = createAnalytics();\r\n\n\n//# sourceURL=webpack://vikuplekarstv/./src/analytics.js?");
 
 /***/ })
 

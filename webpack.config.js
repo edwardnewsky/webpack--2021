@@ -1,5 +1,6 @@
 const path = require('path');
 const HTMLWebackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -13,7 +14,8 @@ module.exports = {
   },
   plugins: [
     new HTMLWebackPlugin({
-      title: 'Webpack',
+      template: './src/index.html',
     }),
+    new CleanWebpackPlugin(),
   ],
 };
