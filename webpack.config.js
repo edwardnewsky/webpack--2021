@@ -3,10 +3,11 @@ const HTMLWebackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
+  context: path.resolve(__dirname, 'src'),
   mode: 'development',
   entry: {
-    main: './src/index.js',
-    analytics: './src/analytics.js',
+    main: './index.js',
+    analytics: './analytics.js',
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -14,8 +15,16 @@ module.exports = {
   },
   plugins: [
     new HTMLWebackPlugin({
-      template: './src/index.html',
+      template: './index.html',
     }),
     new CleanWebpackPlugin(),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
 };
