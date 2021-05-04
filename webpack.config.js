@@ -13,6 +13,20 @@ module.exports = {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
   },
+  resolve: {
+    // Здесь можно написать расширения которы не хочется писать в коде
+    extensions: ['.js', '.json', '.png'],
+    alias: {
+      // Здесь можно задавать отностильное наименование путей
+      '@models': path.resolve(__dirname, 'src/models'),
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   plugins: [
     new HTMLWebackPlugin({
       template: './index.html',
