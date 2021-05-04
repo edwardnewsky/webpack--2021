@@ -27,6 +27,10 @@ module.exports = {
       chunks: 'all',
     },
   },
+  devServer: {
+    open: 'true',
+    port: 4200,
+  },
   plugins: [
     new HTMLWebackPlugin({
       template: './index.html',
