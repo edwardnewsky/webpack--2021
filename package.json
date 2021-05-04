@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/edwardnewsky/vikuplekarstv/issues"
   },
-  "homepage": "https://github.com/edwardnewsky/vikuplekarstv#readme"
+  "homepage": "https://github.com/edwardnewsky/vikuplekarstv#readme",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.3.1",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0"
+  }
 }
