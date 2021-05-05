@@ -7,7 +7,8 @@
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
-    "start": "cross-env NODE_ENV=development webpack serve --mode development --open"
+    "start": "cross-env NODE_ENV=development webpack serve --mode development --open",
+    "stats": "webpack --json > stat.json && webpack-bundle-analyzer stats.json"
   },
   "browserslist": "> 0.25%, not dead",
   "repository": {
@@ -34,6 +35,8 @@
     "css-loader": "^5.2.4",
     "css-minimizer-webpack-plugin": "^2.0.0",
     "csv-loader": "^3.0.3",
+    "eslint": "^7.25.0",
+    "eslint-loader": "^4.0.2",
     "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
@@ -50,6 +53,7 @@
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^5.1.1",
     "webpack": "^5.36.2",
+    "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^4.6.0",
     "webpack-dev-server": "^3.11.2",
     "xml-loader": "^1.2.1"

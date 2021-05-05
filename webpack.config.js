@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -62,6 +63,37 @@ const cssLoaders = (extra) => {
   return loaders;
 };
 
+const plugins = () => {
+  const base = [
+    new HTMLWebackPlugin({
+      template: './index.html',
+      minify: {
+        collapseWhitespace: isProd,
+      },
+    }),
+    new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          // Откуда копировать
+          from: path.resolve(__dirname, 'src/favicon.ico'),
+          // Куда копировать
+          to: path.resolve(__dirname, 'dist'),
+        },
+      ],
+    }),
+    new MiniCssExtractPlugin({
+      filename: filename('css'),
+    }),
+  ];
+
+  if (isProd) {
+    base.push(new BundleAnalyzerPlugin());
+  }
+
+  return base;
+};
+
 const babelOptions = (preset) => {
   const opts = {
     presets: [['@babel/preset-env', { useBuiltIns: 'usage', corejs: 3 }]],
@@ -71,6 +103,21 @@ const babelOptions = (preset) => {
     opts.presets.push(preset);
   }
   return opts;
+};
+
+const jsLoaders = () => {
+  const loaders = [
+    {
+      loader: 'babel-loader',
+      options: babelOptions(),
+    },
+  ];
+
+  if (isDev) {
+    loaders.push('eslint-loader');
+  }
+
+  return loaders;
 };
 
 module.exports = {
@@ -101,28 +148,7 @@ module.exports = {
     hot: isDev,
   },
   devtool: isDev ? 'source-map' : false,
-  plugins: [
-    new HTMLWebackPlugin({
-      template: './index.html',
-      minify: {
-        collapseWhitespace: isProd,
-      },
-    }),
-    new CleanWebpackPlugin(),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          // Откуда копировать
-          from: path.resolve(__dirname, 'src/favicon.ico'),
-          // Куда копировать
-          to: path.resolve(__dirname, 'dist'),
-        },
-      ],
-    }),
-    new MiniCssExtractPlugin({
-      filename: filename('css'),
-    }),
-  ],
+  plugins: plugins(),
   module: {
     rules: [
       {
@@ -180,10 +206,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: babelOptions(),
-        },
+        use: jsLoaders(),
       },
       {
         test: /\.ts$/,
