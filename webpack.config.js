@@ -15,29 +15,63 @@ const optimization = () => {
       chunks: 'all',
     },
   };
-
   if (isProd) {
+    config.minimize = true;
     config.minimizer = [
       new OptimizeCssAssetsPlugin(),
       new TerserWebpackPlugin(),
     ];
   }
-
   return config;
 };
 
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
+const filename = (ext) =>
+  isDev ? `[name].${ext}` : `[name].[fullhash].${ext}`;
+
+const cssLoaders = (extra) => {
+  const loaders = [
+    {
+      loader: MiniCssExtractPlugin.loader,
+      options: {
+        publicPath: (resourcePath, context) => {
+          return path.relative(path.dirname(resourcePath), context) + '/';
+        },
+      },
+    },
+    'css-loader',
+    {
+      loader: 'postcss-loader',
+      options: {
+        postcssOptions: {
+          plugins: [
+            [
+              'postcss-preset-env',
+              {
+                browsers: 'last 3 versions',
+                autoprefixer: { grid: true },
+              },
+            ],
+          ],
+        },
+      },
+    },
+  ];
+  if (extra) {
+    loaders.push(extra);
+  }
+  return loaders;
+};
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
   entry: {
     // Тут можно задать несколько точек входа
-    main: './index.js',
-    analytics: './analytics.js',
+    main: '@/index.js',
+    analytics: '@/analytics.js',
   },
   output: {
-    filename: filename('js'),
+    filename: `js/${filename('js')}`,
     path: path.resolve(__dirname, 'dist'),
   },
   resolve: {
@@ -81,43 +115,43 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {},
-          },
-          'css-loader',
-        ],
+        use: cssLoaders(),
       },
       {
         test: /\.less$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {},
-          },
-          'css-loader',
-          'less-loader',
-        ],
+        use: cssLoaders('less-loader'),
       },
       {
         test: /\.s[ac]ss$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {},
+        use: cssLoaders('sass-loader'),
+      },
+      {
+        test: /\.(?:ico|png|jpg|jpeg|svg|gif)$/,
+        loader: 'file-loader',
+        options: {
+          outputPath: 'assets/images',
+          name() {
+            if (isDev) {
+              return '[name].[ext]';
+            }
+
+            return '[name].[fullhash].[ext]';
           },
-          'css-loader',
-          'sass-loader',
-        ],
+        },
       },
       {
-        test: /\.(png|jpg|svg|gif)$/,
-        use: ['file-loader'],
-      },
-      {
-        test: /\.(ttf|woff|woff2|eot)$/,
-        use: ['file-loader'],
+        test: /\.(ttf|woff|woff2|eot|otf)$/,
+        loader: 'file-loader',
+        options: {
+          outputPath: 'assets/fonts',
+          name() {
+            if (isDev) {
+              return '[name].[ext]';
+            }
+
+            return '[name].[fullhash].[ext]';
+          },
+        },
       },
       {
         test: /\.xml$/,
