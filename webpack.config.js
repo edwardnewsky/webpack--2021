@@ -62,6 +62,17 @@ const cssLoaders = (extra) => {
   return loaders;
 };
 
+const babelOptions = (preset) => {
+  const opts = {
+    presets: [['@babel/preset-env', { useBuiltIns: 'usage', corejs: 3 }]],
+    plugins: ['@babel/plugin-proposal-class-properties'],
+  };
+  if (preset) {
+    opts.presets.push(preset);
+  }
+  return opts;
+};
+
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
@@ -114,6 +125,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
+      {
         test: /\.css$/,
         use: cssLoaders(),
       },
@@ -160,6 +175,14 @@ module.exports = {
       {
         test: /\.csv$/,
         use: ['csv-loader'],
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: babelOptions(),
+        },
       },
     ],
   },
