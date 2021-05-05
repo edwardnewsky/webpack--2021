@@ -27,6 +27,8 @@
     "csv-loader": "^3.0.3",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.1",
+    "less": "^4.1.1",
+    "less-loader": "^8.1.1",
     "mini-css-extract-plugin": "^1.6.0",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "papaparse": "^5.3.0",
