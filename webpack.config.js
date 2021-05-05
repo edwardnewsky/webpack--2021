@@ -79,7 +79,7 @@ module.exports = {
   entry: {
     // Тут можно задать несколько точек входа
     main: ['@babel/polyfill', './index.js'],
-    analytics: './analytics.js',
+    analytics: './analytics.ts',
   },
   output: {
     filename: `js/${filename('js')}`,
@@ -182,6 +182,22 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: babelOptions(),
+        },
+      },
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: babelOptions('@babel/preset-typescript'),
+        },
+      },
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: babelOptions('@babel/preset-react'),
         },
       },
     ],
