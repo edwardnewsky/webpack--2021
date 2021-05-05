@@ -78,8 +78,8 @@ module.exports = {
   mode: 'development',
   entry: {
     // Тут можно задать несколько точек входа
-    main: '@/index.js',
-    analytics: '@/analytics.js',
+    main: ['@babel/polyfill', './index.js'],
+    analytics: './analytics.js',
   },
   output: {
     filename: `js/${filename('js')}`,
